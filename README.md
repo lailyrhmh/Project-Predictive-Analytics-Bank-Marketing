@@ -51,8 +51,11 @@ Dataset ini memiliki format .csv dengan total 11162 baris data dan 17 column ata
 17. deposit: melakukan deposit (boolean)
 
 ### Exploratory Data Analysis
-Setelah dilakukan 4 tahapan exploratory data yaitu _missing value, duplicate, univariate dan multivariate analysis_ didapatkan data ini cukup bersih seperti tidak adanya _missing value_ sehingga tidak terlalu banyak memerlukan proses data cleaning, tetapi beberapa data imbalance yang menyebabkan data bias terhadap suatu kategori, dan melakukan _down-sampling_ terhadap data setelah dilakukan korelasi antar fitur numerik.
+Setelah dilakukan 4 tahapan exploratory data yaitu _missing value, duplicate, univariate dan multivariate analysis_ didapatkan data ini cukup bersih seperti tidak adanya _missing value_ sehingga tidak terlalu banyak memerlukan proses data cleaning, tetapi beberapa data imbalance yang menyebabkan data bias terhadap suatu kategori, dan melakukan _down-sampling_ terhadap data setelah dilakukan korelasi antar fitur numerik. kemudian untuk data target memiliki pembagian data sebagai berikut:
 
+![image](https://user-images.githubusercontent.com/91611703/190559276-9e7d50f7-51f1-445d-a353-b77e67147f68.png)
+
+dari data terdapat 47.4% data 'yes' dan 52,6% data 'no' pada kategori deposit. Hal ini menunjukan bahwa data target sudah balance karena tidak ada kategori yang dominan dan tidak akan menyebabkan bias jika dilakukan _training_.
 
 # Data Preparation
 ---
@@ -69,9 +72,9 @@ Standarisasi data menggunakan standard scaler. Ketika sebelumnya kita melakukan 
 # Modeling
 ---
 
-Model yang digunakan dalam proyek ini adalah _logistic regression_. Dengan hyperparameter solver dengan nilai liblinear karena klasifikasi pada proyek ini merupakan klasifikasi 2 kelas, _penalty_ yang dapat digunakan untuk solver liblinear adalah l1 dan l2 dan nilai C berada pada range 1 sampai 100 yang akan dicari _best model_-nya menggunakan _Grid search_. 
+Model yang digunakan dalam proyek ini adalah _logistic regression_. Hyperparameter yang digunakan adalah _solver_ dengan nilai liblinear, saga dll. merupakan algoritma untuk optimasi penyelesaian masalah, _penalty_ yang dapat digunakan untuk solver liblinear adalah l1 dan l2 dan nilai C berada pada range 1 sampai 100 untuk memperkuat regulasi pada model yang akan dicari _best model_-nya menggunakan _Grid search_. Selain itu juga digunakan hyperparameter cv atau cross-validation generator untuk model, kemudian menggunakan hyperparameter verbose biasa digunakan pada liblinear dengan mengubah nilai hyperparameter menjadi positif (default=0) dan terakhir menggunakan n_jobs untuk jumlah proses yang di run dalam paralel.
 
-Pertama menggunakan hyperparameter solver liblinear karena hasil atau target klasifikasi merupakan binary class. Kemudian menggunakan penalty untuk melakuka spesifikasi penalty untuk soveler liblinear yang dapat menggunakan penalty l1 dan l2 dalam prosesnya. Kemudian menggunakan nilai C untuk memperkuat regulasi pada model.
+Pertama menggunakan hyperparameter solver liblinear karena hasil atau target klasifikasi merupakan binary class. Kemudian menggunakan penalty untuk melakuka spesifikasi penalty untuk soveler liblinear yang dapat menggunakan penalty l1 dan nilai C=100 yang didapatkan menggunakan grid search. untuk nilai cv=5 ditentukan dengan intuisi, nilai verbose menjadi positif atau True (1), dan nilai n_jobs=-1 untuk menggunakan semua _processor_
 
 
 # Evaluation Model
