@@ -56,29 +56,14 @@ df
 
 > ## Deskripsi Variabel
 
-Data memiliki 17 column dan 11162 baris
-1. age: umur (numerik)
-2. job: pekerjaan (kategori)
-3. marital: status pernikahan (boolean)
-4. education: pendidikan (kategori)
-5. default: credit secara default (boolean)
-6. balance: bank balance
-7. housing: pinjaman untuk rumah (boolean)
-8. loan: pinjaman pribadi (boolean)
-9. contact: tipe contact person (kategori)
-10. month: kontak terakhir dengan bank dalam bulan (kategori)
-11. day: kontak terakhir dengan bank dalam hari (kategori)
-12. duration: durasi kontak dengan bank (num)
-13. campaign: jumlah kontak selama campaign (num)
-14. pdays: jumlah hari sejak terakhir dihubungi dari campaign sebelumnya (num)
-15. previous: jumlah kontak dengan klien sebelum campaign (num)
-16. poutcome: hasil dari marketing campaign sebelumnya (kategori)
-17. deposit: melakukan deposit (boolean)
+Info data: diketahui memiliki 17 column dan 11162 baris dengan tipe data int, object.
 
 
 """
 
 df.info()
+
+"""melihat diskripsi data seperti nilai *min max*, mean, standart deviasi dll."""
 
 df.describe()
 
@@ -98,10 +83,13 @@ df.duplicated().sum()
 
 ### Categorical Features
 
+Mengambil data dengan tipe data object.
 """
 
 cat_data = df.select_dtypes(exclude='number').columns.drop(['deposit', 'job'])
 cat_data
+
+"""Membuat plot data kategori yang dibagi berdasarkan nilai deposit."""
 
 plt.figure(figsize=(13,15))
 for i,cat_fea in enumerate(cat_data):
@@ -118,10 +106,14 @@ plt.show()
 """didapat hasil data yang imbalance pada *default* terlihat dari jarak jumlah dua kategori data
 
 ### Numerical Features
+
+Mengambil data dengan tipe data numerik.
 """
 
 num_data = df.select_dtypes(include='number')
 num_data.head()
+
+"""Membuat plot data numerik menggunakan scatter plot untuk mengetahui apakah ada outlier pada data."""
 
 plt.figure(figsize=(13,15))
 for i,num_fea in enumerate(num_data):
@@ -130,6 +122,8 @@ for i,num_fea in enumerate(num_data):
     plt.title("Probability Plot {}".format(num_fea))
 plt.tight_layout()    
 plt.show()
+
+"""Membuat plot data numerik yang dibagi berdasarkan nilai deposit."""
 
 plt.figure(figsize=(13,15))
 for i,v in enumerate(num_data):
@@ -142,6 +136,8 @@ for i,v in enumerate(num_data):
 plt.tight_layout()
 plt.show()
 
+"""Membuat matriks korelasi data numerik."""
+
 plt.figure(figsize=(10,8),dpi=80)
 sns.heatmap(num_data.corr(),cmap="coolwarm",annot=True,linewidth=0.5)
 plt.yticks(rotation=55)
@@ -153,7 +149,10 @@ plt.yticks(rotation=55)
 
 df.drop(columns =['default' ,'pdays'] ,axis =1 ,inplace = True)
 
-"""## Target Data"""
+"""## Target Data
+
+mengecek apakah data target sudah balance.
+"""
 
 df['deposit'].value_counts()
 
@@ -177,6 +176,8 @@ plt.show()
 > ## Encoding Data 
 
 ### Boolean type
+
+melakukan one-hot encoding pada data boolean yaitu angka 1 untuk kategori 'yes' dan angka 0 untuk kategori 'no'
 """
 
 df.select_dtypes('object').columns
@@ -188,13 +189,18 @@ for i in boolean_cols:
 df.head()
 
 """
-### Category type"""
+### Category type
+
+
+melakukan one-hot encoding untuk data kategori dimana akan bernilai 1 untuk setiap kategori yang bernilai benar"""
 
 cat_cols = ['job', 'marital', 'education', 'contact', 'month', 'poutcome']
 for i in cat_cols:
   df = pd.concat([df, pd.get_dummies(df[i], prefix=i)],axis=1)
   df.drop([i], axis=1, inplace=True)
 df.head()
+
+"""melihat hasil akhir atau final data"""
 
 df
 
@@ -204,7 +210,7 @@ df.deposit_new
 
 > ## Split Dataset
 
-"""
+split data dengan proporsi 8:2 dengan 8 untuk data train dan 2 untuk data test nya"""
 
 X = df.drop(['deposit_new'], axis=1)
 y = df['deposit_new']
@@ -213,13 +219,17 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, rando
 print(len(X_train))
 print(len(X_test))
 
+"""cek lagi diskripsi data apakah memiliki skala yang berjauhan setelah dilakukan cleaning data dan preprocessing"""
+
 X_train.describe()
+
+"""didapat hasil standar deviasi yang skalanya berjauhan dengan data yang dilakukan one-hot encoding"""
 
 df.columns
 
 """> ## Standarisasi
 
-dilakukan setelah split data untuk menghindari kebocoran target
+Untuk menyamakan standar deviasi antara data yang dilakukan one-hot endcoding (data kategori) dengan data numerik agar tidak terjadi bias. Proses ini dilakukan setelah split data untuk menghindari kebocoran target.
 """
 
 num_data = ['age', 'balance', 'day', 'duration', 'campaign', 'previous']
@@ -238,27 +248,41 @@ X_train[num_data].describe().round(2)
 
 > ## Model Training
 
-
+Menggunakan logistic regression
 """
 
 model = linear_model.LogisticRegression(solver='liblinear')
 model.fit(X_train, y_train)
 
-"""> ## Model Evaluation"""
+"""> ## Model Evaluation
+
+
+Mendefinisikan hyperparameter tuning untuk model
+"""
 
 penalty = ['l1', 'l2']
-C = np.logspace(-4,4,20)
+C = np.logspace(2,5,20)
+
+"""memasukkan hyperparameters kedalam dictionary untuk digunakan pada  model"""
 
 hyperparameters = dict(penalty=penalty, C=C)
 
+"""Mengatur hyperparameter tuning menggunakan Grid search"""
+
 clf = GridSearchCV(model, hyperparameters, cv=5, verbose=True, n_jobs=-1)
 
+"""Fit model menggunakan best_model hasil dari Grid search"""
+
 best_model = clf.fit(X_train, y_train)
+
+"""print hasil hyperparameter best model"""
 
 print('Best Penalty:', best_model.best_estimator_.get_params()['penalty'])
 print('Best C:', best_model.best_estimator_.get_params()['C'])
 
 y_pred = best_model.predict(X_test)
+
+"""Evaluasi model menggunakan confusion matrix"""
 
 print(classification_report(y_test, y_pred))
 roc_auc_score(y_test, y_pred)
