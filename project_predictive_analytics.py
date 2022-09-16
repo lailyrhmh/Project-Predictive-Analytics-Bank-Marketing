@@ -161,7 +161,7 @@ plt.subplot(1,2,2)
 labels =df['deposit'].value_counts(sort = True).index
 sizes = df['deposit'].value_counts(sort = True)
 plt.pie(sizes,labels=labels,autopct='%1.1f%%', startangle=270,)
-plt.title('Total yes and No category',size = 15)
+plt.title('Total yes dan no kategori data deposit',size = 12)
 plt.show()
 
 """data target sudah balance dengan dua kategori
@@ -251,7 +251,7 @@ X_train[num_data].describe().round(2)
 Menggunakan logistic regression
 """
 
-model = linear_model.LogisticRegression(solver='liblinear')
+model = linear_model.LogisticRegression()
 model.fit(X_train, y_train)
 
 """> ## Model Evaluation
@@ -260,12 +260,13 @@ model.fit(X_train, y_train)
 Mendefinisikan hyperparameter tuning untuk model
 """
 
+solver = ['liblinear']
 penalty = ['l1', 'l2']
 C = np.logspace(2,5,20)
 
 """memasukkan hyperparameters kedalam dictionary untuk digunakan pada  model"""
 
-hyperparameters = dict(penalty=penalty, C=C)
+hyperparameters = dict(solver=solver, penalty=penalty, C=C)
 
 """Mengatur hyperparameter tuning menggunakan Grid search"""
 
