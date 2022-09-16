@@ -96,7 +96,7 @@ pada baris 0 menunjukan nilai untuk _precision_-nya yaitu 0.81 dan nilai _recall
 # Kesimpulan 
 ---
 
-Model Machine learning untuk memprediksi orang yang akan melakukan deposito pada _marketing_ bank yang dikembangkan menggunakan logistic linear mendapatkan hasil akurasi rata-rata diatas 80% dan presisi diatas 80% yang artinya sudah memenuhi _goals_ atau tujuan yang ingin dicapai diharapkan dengan model ini dapat membantu untuk menentukan pelanggan yang diikutkan dalam _marketing_ selanjutnya. Dalam pengembangan model selanjutnya diharapkan bisa meningkatkan akurasi model untuk mencapai hasil yang lebih baik misalnya menggunakan algoritma untuk klasifikasi yang lain seperti KKN dan Naive Bayer.
+Model Machine learning untuk memprediksi orang yang akan melakukan deposito pada _marketing_ bank yang dikembangkan menggunakan logistic regression mendapatkan hasil akurasi rata-rata diatas 80% dan presisi diatas 80% yang artinya sudah memenuhi _goals_ atau tujuan yang ingin dicapai diharapkan dengan model ini dapat membantu untuk menentukan pelanggan yang diikutkan dalam _marketing_ selanjutnya. Dalam pengembangan model selanjutnya diharapkan bisa meningkatkan akurasi model untuk mencapai hasil yang lebih baik misalnya menggunakan algoritma untuk klasifikasi yang lain seperti KKN dan Naive Bayer.
 
 
 # Referensi (APA7)  :
